@@ -1,0 +1,13 @@
+.root{
+	-fx-background-color: white;
+}
+
+.lateralPanes {
+	-fx-background-color: #1F8FE8;
+	
+}
+
+#paneShadow {
+	-fx-background-color: #F7F7F7;
+	-fx-effect: dropshadow( three-pass-box , rgba(0,0,0,1) , 5, 0.0 , 0 , 1 );
+}
