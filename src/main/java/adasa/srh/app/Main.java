@@ -1,6 +1,9 @@
 package adasa.srh.app;
 
 import javafx.application.Application;
+
+// mudança na  captura das coordenadas,24 de janeiro de 2018
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

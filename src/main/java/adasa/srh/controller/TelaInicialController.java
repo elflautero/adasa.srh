@@ -101,23 +101,48 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 			
 		String linkCoord = (tfInserirLink.getText());
 
-		int pInicial= linkCoord.indexOf("@");
-		int pFinal = linkCoord.lastIndexOf(",");
-		String coord = linkCoord.substring(pInicial, pFinal);
-				
-		//capturar separado @-15.8562721 e ,-48.0364734
-		pInicial = coord.indexOf("@");
-		pFinal = coord.indexOf(",");
+		// parâmetro de busca: @ e , 
+
+        int pInicial = linkCoord.indexOf("@"); //posição inicial do @ referente ao link completo 
+
+        int pFinal = linkCoord.lastIndexOf(","); // posição da última ,(vírgula) referente ao link completo 
+
+        String coord = linkCoord.substring(pInicial, pFinal); 
+
+         
+
+        System.out.println("Posições do @ e , : " + pInicial + " e " + pFinal); 
+
+        System.out.println("String coord: " + coord); 
+
+         
+
+        // repetir a busca de posicionamento  do @ e , a partir agora da String coord 
+
+        pInicial = coord.indexOf("@"); 
+
+        pFinal = coord.indexOf(","); 
+
+         
+
+        System.out.println(pInicial + " e " + pFinal); 
+
+         
+
+        int pFinalSum = pFinal + 1; 
+
+        int pFinalSub = pFinal - 1; 
+
+        String lat = coord.substring(1,(pFinal)); 
+
+        String lon = coord.substring (pFinalSum, (pFinal + pFinalSub)); 
+
+        System.out.println(lat); 
+
+        System.out.println(lon); 
 		
-		//tirar o @ e a ,
-		String lat = coord.substring(pInicial, pFinal);
-		String latLat = lat.substring(1);
-		
-		String lon = coord.substring(pFinal);
-		String lonLon = lon.substring(1);
-		
-		tfLat.setText(latLat);
-		tfLon.setText(lonLon);
+		tfLat.setText(lat);
+		tfLon.setText(lon);
 		
 	}
 
