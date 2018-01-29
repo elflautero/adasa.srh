@@ -26,6 +26,10 @@ import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
 import com.lynden.gmapsfx.javascript.object.Marker;
 import com.lynden.gmapsfx.javascript.object.MarkerOptions;
+
+import adasa.srh.dao.DenunciaDao;
+import adasa.srh.entity.Denuncia;
+
 import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
 
 import javafx.embed.swing.SwingFXUtils;
@@ -61,6 +65,34 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 	@FXML
 	ImageView imgVHome = new ImageView();
 	
+			// ABA DENUNCIA //
+	
+	@FXML
+	Button btnSalvar = new Button();
+	@FXML
+	TextField tfDocumento = new TextField();
+	@FXML
+	TextField tfProcSei =  new TextField();
+	@FXML
+	TextField tfDocSei = new TextField();
+	@FXML
+	TextField tfResDen = new TextField();
+	
+	public void btnSalvarSalvar (ActionEvent event) {
+		
+		Denuncia denuncia = new Denuncia();
+		
+		denuncia.setDocumento_Denuncia(tfDocumento.getText());
+		denuncia.setProcesso_SEI_Denuncia(tfProcSei.getText());
+		denuncia.setDocumento_SEI_Denuncia(tfDocSei.getText());
+		denuncia.setDescricao_Denuncia(tfResDen.getText());
+		
+		DenunciaDao dao = new DenunciaDao();
+		dao.addDenuncia(denuncia);
+		
+	}
+	
+			// ABA ENDEREÇO //
 	
 	// GOOGLE MAPS - GMAPSFX
 	@FXML

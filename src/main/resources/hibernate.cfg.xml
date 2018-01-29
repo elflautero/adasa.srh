@@ -26,12 +26,9 @@
 			<!-- Drop and re-create the database schema on startup -->
 		<property name="hbm2ddl.auto">update</property>
 		 
+		 <!-- MAPEAMENTO DAS ENTIDADES -->
 		<mapping class="adasa.srh.entity.Fiscal"/>
-		
-		<!-- adasa.srh.entity.Fiscal 
-			adasa.srh.src.main.java.adasa.srh.entity.Fiscal.java
-		
-		-->
+		<mapping class="adasa.srh.entity.Denuncia"/>
 		
     </session-factory>
 </hibernate-configuration>

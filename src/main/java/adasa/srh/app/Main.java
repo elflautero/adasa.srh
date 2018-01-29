@@ -26,7 +26,7 @@ public class Main extends Application {
 			primaryStage.setMaximized(false);
 			primaryStage.setResizable(false);
 			primaryStage.getIcons().add(new Image ("/images/iconWater.png")); // icone na tela (superior esquerda)
-			primaryStage.setTitle("Login - Fiscalização");
+			primaryStage.setTitle("Cadastro");
 			primaryStage.setScene(scene);
 			scene.getStylesheets().add("css/CadastroFiscalCss.css"); // caminho  do  css
 			primaryStage.show();
@@ -42,8 +42,6 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args)  {
-		//MainTelaInicial.getStage();
-		//adasa.srh.app.MainTelaInicial.Executar();
 		launch(args);
 
 
