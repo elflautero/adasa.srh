@@ -40,6 +40,8 @@ import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 
 
 
@@ -99,6 +101,86 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 	Button btnPesquisar = new Button();
 	@FXML
 	Button btnSair = new Button();
+	
+	// BOTÕES - ATOS SRH
+	
+		@FXML
+		Button btnRelatorio = new Button();
+		@FXML
+		Button btnTN = new Button();
+		@FXML
+		Button btnAIA = new Button();
+		@FXML
+		Button btnMulta = new Button();
+		@FXML
+		Button btnHTML = new Button();
+		@FXML
+		Button btnGoogle = new Button();
+		@FXML
+		Button btnSEI = new Button();
+		@FXML
+		Button btnNavegador = new Button();
+		
+
+		//STRING DE TESTE EM HTML PARA MOSTAR NO VISOR DO HTML EDITOR
+		String INITIAL_TEXT = "<table style='border:4px solid;border-bottom-width:0px; margin-left:auto;margin-right:auto;width:800px;'>"
+				+ 				"<tbody>" 
+				+					"<tr>"
+				+						"<td align='left'><strong>RELAT&Oacute;RIO DE VISTORIA E FISCALIZA&Ccedil;&Atilde;O N&deg;</strong></td>" 
+				+						"<td align='left'><strong>SEI N&deg;</strong></td>"
+				+					"</tr>"
+				+				"</tbody>"
+				+			"</table>";
+		String google = "https://www.google.com.br/search?source=hp&ei=BqVsWruNOMuXwgSko764DA&q=";
+		
+		// TEXT FIELD
+		@FXML
+		TextField tfLink = new TextField();
+		
+		//WEB BROWSER
+		@FXML
+		WebView navegador = new WebView();
+		@FXML
+		WebEngine engine = new WebEngine();
+		
+		//AÇÕES DOS BOTÕES
+		public void btnHTMLCopiar (ActionEvent event) {
+				
+		}
+		
+		public void btnGoogleEntrar (ActionEvent event) {
+			engine.load("http://www.google.com.br");
+			}
+		
+		public void btnSEIEntrar (ActionEvent event) {
+			engine.load("https://sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI");
+		}
+		
+		public void btnNavegadorIr (ActionEvent event) {
+			String pesquisa = tfLink.getText().toString();
+			engine.load(google + pesquisa);
+			
+			
+		}
+		
+		// RELATORIOS E TNS
+		public void btnRelatorioCriar (ActionEvent event) {
+			engine.loadContent(INITIAL_TEXT);
+			
+		}
+		
+		public void btnTNCriar (ActionEvent event) {
+			
+		}
+		
+		public void btnAIACriar (ActionEvent event) {
+			
+		}
+		
+		public void btnMultaCriar (ActionEvent event) {
+			
+		}
+
 	
 	// TABLE VIEW
 		@FXML
@@ -163,6 +245,10 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 	}
 	public void btnCancelarHabilitar (ActionEvent event) {
 		
+		/* ver um jeito de limpar os campos mas dar um reset no programa também
+		 * 
+		 */
+		
 		modularBotoesInicial();
 	}
 	public void btnPesquisarHabilitar (ActionEvent event) {
@@ -175,6 +261,10 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 	}
 	
 	public void listarDenuncia (String strPesquisa) {
+		
+		/* ver como faz para quando clicar num documento ele preencher tudo acima e abaixo em outra lista
+		 * buscar outros documentos  relacionados como tn, rv etc
+		 */
 		
 		//CONEXÃO  DAO
 		DenunciaDao denunciaDaoController = new DenunciaDao ();
@@ -289,14 +379,21 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 		
 	}
 	
-
-
-	
 	public void initialize(URL url, ResourceBundle rb) {
+		
+		// DENUNCIA - BOTÕES
 		modularBotoesInicial();
+		
+		
 		cbTipoPessoa.setValue("Física");
 		cbTipoPessoa.setItems(olTipoPessoa);
+		
+		//MAPA
 		mapView.addMapInializedListener(this);
+		
+		//ATOS SRH - WEBVIEW
+		engine = navegador.getEngine();
+		engine.load("https://sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI");
 	}
 	
 	private void modularBotoesInicial () {
