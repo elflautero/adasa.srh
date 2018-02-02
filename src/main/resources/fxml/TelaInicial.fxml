@@ -9,6 +9,8 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -25,31 +27,38 @@
                   <content>
                     <AnchorPane id="tablePaneShadow" minHeight="0.0" minWidth="0.0" prefHeight="593.0" prefWidth="913.0" style="-fx-background-color: #F7F7F7;" stylesheets="@../css/TelaInicialCss.css">
                            <children>
-                              <Pane prefHeight="164.0" prefWidth="919.0">
+                              <Pane layoutX="9.0" prefHeight="114.0" prefWidth="902.0">
                                  <children>
-                                    <TextField fx:id="tfDocumento" layoutX="14.0" layoutY="23.0" prefHeight="26.0" prefWidth="486.0" />
-                                    <TextField fx:id="tfDocSei" layoutX="511.0" layoutY="22.0" prefHeight="26.0" prefWidth="173.0" />
-                                    <TextField fx:id="tfProcSei" layoutX="692.0" layoutY="23.0" prefHeight="26.0" prefWidth="213.0" />
-                                    <TextField fx:id="tfResDen" layoutX="12.0" layoutY="76.0" prefHeight="26.0" prefWidth="896.0" />
-                                    <Label layoutX="14.0" layoutY="5.0" text="Documento:" />
-                                    <Label layoutX="511.0" layoutY="3.0" text="Número SEI:" />
-                                    <Label layoutX="692.0" layoutY="4.0" text="Processo SEI:" />
-                                    <Label layoutX="12.0" layoutY="58.0" text="Resumo da Denúncia:" />
-                                    <Button fx:id="btnSalvar" layoutX="12.0" layoutY="118.0" mnemonicParsing="false" onAction="#btnSalvarSalvar" text="Salvar" />
+                                    <TextField fx:id="tfDocumento" layoutX="12.0" layoutY="31.0" prefHeight="23.0" prefWidth="575.0" />
+                                    <TextField fx:id="tfDocSei" layoutX="596.0" layoutY="31.0" prefHeight="23.0" prefWidth="139.0" />
+                                    <TextField fx:id="tfProcSei" layoutX="749.0" layoutY="31.0" prefHeight="23.0" prefWidth="139.0" />
+                                    <TextField fx:id="tfResDen" layoutX="12.0" layoutY="77.0" prefHeight="23.0" prefWidth="879.0" />
+                                    <Label layoutX="14.0" layoutY="6.0" prefHeight="17.0" prefWidth="77.0" text="Documento:" />
+                                    <Label layoutX="596.0" layoutY="6.0" prefHeight="17.0" prefWidth="71.0" text="Número SEI:" />
+                                    <Label layoutX="749.0" layoutY="6.0" prefHeight="17.0" prefWidth="80.0" text="Processo SEI:" />
+                                    <Label layoutX="14.0" layoutY="57.0" prefHeight="17.0" prefWidth="120.0" text="Resumo da Denúncia:" />
                                  </children>
                               </Pane>
-                              <Pane layoutX="205.0" layoutY="215.0" prefHeight="134.0" prefWidth="427.0">
+                              <Pane layoutX="14.0" layoutY="113.0" prefHeight="47.0" prefWidth="896.0">
                                  <children>
-                                    <TextField layoutX="222.0" layoutY="82.0" prefHeight="26.0" prefWidth="190.0" />
-                                    <TextField layoutX="14.0" layoutY="82.0" prefHeight="26.0" prefWidth="190.0" />
-                                    <Label layoutX="14.0" layoutY="14.0" text="Documento Secundário:" />
-                                    <Label layoutX="222.0" layoutY="66.0" text="Número SEI:" />
-                                    <Label layoutX="14.0" layoutY="66.0" text="Processo SEI:" />
-                                    <TextField layoutX="15.0" layoutY="31.0" prefHeight="23.0" prefWidth="397.0" />
+                                    <Button fx:id="btnNovo" layoutX="8.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnNovoHabilitar" prefHeight="22.0" prefWidth="76.0" text="Novo" />
+                                    <Button fx:id="btnSalvar" layoutX="93.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnSalvarSalvar" prefHeight="22.0" prefWidth="75.0" text="Salvar" />
+                                    <Button fx:id="btnEditar" layoutX="176.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnEditarHabilitar" prefHeight="22.0" prefWidth="75.0" text="Editar" />
+                                    <Button fx:id="btnExcluir" layoutX="260.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnExcluirHabilitar" prefHeight="22.0" prefWidth="75.0" text="Excluir" />
+                                    <Button fx:id="btnCancelar" layoutX="344.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnCancelarHabilitar" prefHeight="22.0" prefWidth="75.0" text="Cancelar" />
+                                    <Button fx:id="btnPesquisar" layoutX="724.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnPesquisarHabilitar" prefHeight="22.0" prefWidth="76.0" text="Pesquisar" />
+                                    <Button fx:id="btnSair" layoutX="807.0" layoutY="11.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="75.0" text="Sair" />
+                                    <TextField fx:id="tfPesquisar" layoutX="426.0" layoutY="11.0" prefHeight="23.0" prefWidth="295.0" />
                                  </children>
                               </Pane>
-                           </children>
-                        </AnchorPane>
+                              <TableView fx:id="tvLista" layoutX="20.0" layoutY="160.0" prefHeight="113.0" prefWidth="885.0">
+                                <columns>
+                                  <TableColumn fx:id="tcDocumento" prefWidth="404.0" text="Documento" />
+                                  <TableColumn fx:id="tcDocSEI" minWidth="0.0" prefWidth="240.0" text="Doc SEI" />
+                                    <TableColumn fx:id="tcProcSEI" prefWidth="240.0" text="Proc SEI" />
+                                </columns>
+                              </TableView>
+                           </children></AnchorPane>
                   </content>
                 </Tab>
                 <Tab text="Endereço">

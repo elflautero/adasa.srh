@@ -15,7 +15,7 @@ import javafx.scene.control.TextField;
 
 public class CadastroFiscalController implements Initializable {
 
-	public void initialize(URL arg0, ResourceBundle arg1) {
+	public void initialize(URL url, ResourceBundle ResourceBundle) {
 		// TODO Auto-generated method stub
 		
 	}

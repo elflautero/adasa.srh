@@ -3,6 +3,7 @@ package adasa.srh.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
@@ -20,7 +21,10 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
@@ -29,6 +33,7 @@ import com.lynden.gmapsfx.javascript.object.MarkerOptions;
 
 import adasa.srh.dao.DenunciaDao;
 import adasa.srh.entity.Denuncia;
+import adasa.srh.tabela.DenunciaTabela;
 
 import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
 
@@ -40,7 +45,8 @@ import javafx.scene.image.WritableImage;
 
 public class TelaInicialController implements Initializable, MapComponentInitializedListener  {
 	
-	Double latCoord = -15.7754084; // latidute inicial do mapa - ADASA
+	// MAPS //
+	Double latCoord = -15.7754084; // latitude inicial do mapa - ADASA
 	Double longCoord = -47.9411395; // longitude inicial do mapa - ADASA
 	
 	@FXML
@@ -65,18 +71,67 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 	@FXML
 	ImageView imgVHome = new ImageView();
 	
-			// ABA DENUNCIA //
+			// ABA DENUNCIA - TEXTFIELDS //
 	
-	@FXML
-	Button btnSalvar = new Button();
 	@FXML
 	TextField tfDocumento = new TextField();
 	@FXML
-	TextField tfProcSei =  new TextField();
-	@FXML
 	TextField tfDocSei = new TextField();
 	@FXML
+	TextField tfProcSei =  new TextField();
+	@FXML
 	TextField tfResDen = new TextField();
+	@FXML
+	TextField tfPesquisar = new TextField();
+	
+		// ABA DENÚNCIA - BOTÕES //
+	@FXML
+	Button btnNovo = new Button();
+	@FXML
+	Button btnSalvar = new Button();
+	@FXML
+	Button btnEditar = new Button();
+	@FXML
+	Button btnExcluir = new Button();
+	@FXML
+	Button btnCancelar = new Button();
+	@FXML
+	Button btnPesquisar = new Button();
+	@FXML
+	Button btnSair = new Button();
+	
+	// TABLE VIEW
+		@FXML
+		private TableView <DenunciaTabela> tvLista;
+		
+		// COLUMNS
+		@FXML
+		private TableColumn<DenunciaTabela, String> tcDocumento;
+		@FXML
+		private TableColumn<DenunciaTabela, String> tcDocSEI;
+		@FXML
+		private TableColumn<DenunciaTabela, String> tcProcSEI;
+		
+		// EVENTOS ABA DENÚNCIA //
+	
+
+	public void btnNovoHabilitar (ActionEvent event) {
+		
+		// Field 'Documento' doesn't have a default value Deu erro ao não preencher um dos campos
+		// e mesmo depois acrescentando o valor não digitado, não deu pra cadastrar
+		// mas a pesquisa continuou pesquisando bem...
+		
+		tfDocumento.setDisable(false);
+		tfDocumento.setDisable(false);
+		tfDocSei.setDisable(false);
+		tfProcSei.setDisable(false);
+		tfResDen.setDisable(false);
+		btnSalvar.setDisable(false);
+		btnEditar.setDisable(true);
+		btnExcluir.setDisable(true);
+		btnNovo.setDisable(true);
+		
+	}
 	
 	public void btnSalvarSalvar (ActionEvent event) {
 		
@@ -91,6 +146,62 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 		dao.addDenuncia(denuncia);
 		
 	}
+
+	public void btnEditarHabilitar (ActionEvent event) {
+		
+		tfDocumento.setDisable(false);
+		tfDocumento.setDisable(false);
+		tfDocSei.setDisable(false);
+		tfProcSei.setDisable(false);
+		tfResDen.setDisable(false);
+		btnSalvar.setDisable(true);
+		btnNovo.setDisable(true);
+		
+	}
+	public void btnExcluirHabilitar (ActionEvent event) {
+		
+	}
+	public void btnCancelarHabilitar (ActionEvent event) {
+		
+		modularBotoesInicial();
+	}
+	public void btnPesquisarHabilitar (ActionEvent event) {
+		
+		// colocar tecla enter também além do botão pesquisar
+		
+		String strPesquisa = (String) tfPesquisar.getText();
+		
+		listarDenuncia(strPesquisa);
+	}
+	
+	public void listarDenuncia (String strPesquisa) {
+		
+		//CONEXÃO  DAO
+		DenunciaDao denunciaDaoController = new DenunciaDao ();
+		// LIST (para guardar a DenunciaDao
+		List<Denuncia> denunciaListController = denunciaDaoController.listDenunciaEntity(strPesquisa);
+		// PARA JOGAR O DADO NO TABLEVIEW JAVAFX
+		
+		ObservableList<DenunciaTabela> listDenunciaTabelaOB = FXCollections.observableArrayList();
+		// MÉTODO PARA CHAMAR OS DADOS
+		
+		if (!listDenunciaTabelaOB.isEmpty()) {
+			listDenunciaTabelaOB.clear();
+		}
+		for (Denuncia denuncia : denunciaListController) {
+			DenunciaTabela d = new DenunciaTabela(denuncia.getCod_Denuncia(), denuncia.getDocumento_Denuncia(), denuncia.getDocumento_SEI_Denuncia(), denuncia.getProcesso_SEI_Denuncia());
+			listDenunciaTabelaOB.add(d);
+		}
+		
+		tcDocumento.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("Documento_Denuncia"));
+		tcDocSEI.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("Documento_SEI_Denuncia"));
+		tcProcSEI.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("Processo_SEI_Denuncia"));
+		
+		tvLista.setItems(listDenunciaTabelaOB);
+	 }
+	
+	
+	
 	
 			// ABA ENDEREÇO //
 	
@@ -116,7 +227,7 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 	}
 	
 	// BOTÃO - CAPTURAR TELA DO MAPA PARA O CROQUI
-	public void btnCapturarCorqui (ActionEvent event) {
+	public void btnCapturarCorqui (ActionEvent event) {  // consertar o nome do método, a palavra é croqui
 	
 	WritableImage i = mapView.snapshot(new SnapshotParameters(), null);
 	
@@ -177,12 +288,29 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 		tfLon.setText(lon);
 		
 	}
+	
+
 
 	
 	public void initialize(URL url, ResourceBundle rb) {
+		modularBotoesInicial();
 		cbTipoPessoa.setValue("Física");
 		cbTipoPessoa.setItems(olTipoPessoa);
 		mapView.addMapInializedListener(this);
+	}
+	
+	private void modularBotoesInicial () {
+		
+		tfDocumento.setDisable(true);
+		tfDocumento.setDisable(true);
+		tfDocSei.setDisable(true);
+		tfProcSei.setDisable(true);
+		tfResDen.setDisable(true);
+		btnSalvar.setDisable(true);
+		btnEditar.setDisable(true);
+		btnExcluir.setDisable(true);
+		btnNovo.setDisable(false);
+		
 	}
 		
 	public void mapInitialized() {
