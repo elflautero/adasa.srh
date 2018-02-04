@@ -11,38 +11,41 @@ import javax.imageio.ImageIO;
 import com.lynden.gmapsfx.GoogleMapView;
 import com.lynden.gmapsfx.MapComponentInitializedListener;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.SnapshotParameters;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-
 import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
+import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
 import com.lynden.gmapsfx.javascript.object.Marker;
 import com.lynden.gmapsfx.javascript.object.MarkerOptions;
 
 import adasa.srh.dao.DenunciaDao;
 import adasa.srh.entity.Denuncia;
 import adasa.srh.tabela.DenunciaTabela;
-
-import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
-
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.web.PopupFeatures;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Callback;
 
 
 public class TelaInicialController implements Initializable, MapComponentInitializedListener  {
@@ -50,6 +53,12 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 	// MAPS //
 	Double latCoord = -15.7754084; // latitude inicial do mapa - ADASA
 	Double longCoord = -47.9411395; // longitude inicial do mapa - ADASA
+	
+	String linkSEI = "http://treinamento3.sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI";
+	
+	
+	@FXML  // tentando colocar um controlador para cada aba do tabpane
+	private TesteController TesteController;
 	
 	@FXML
 	Button btnAtualizar = new Button();
@@ -59,6 +68,8 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 	Button btnCapturar = new Button();
 	@FXML
 	TabPane tpTelaInicial = new TabPane();
+	//@FXML
+	//Tab tbTeste = new Tab(); 
 	
 	// LATITUDE E LONGITUDE
 	@FXML
@@ -102,6 +113,8 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 	@FXML
 	Button btnSair = new Button();
 	
+		// colocar o botão atualizar, para a atualizar a tabela com o novo documento salvo
+	
 	// BOTÕES - ATOS SRH
 	
 		@FXML
@@ -138,10 +151,15 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 		TextField tfLink = new TextField();
 		
 		//WEB BROWSER
+		
+			// colocar alerta de webview sem conexao
+		
+		
 		@FXML
 		WebView navegador = new WebView();
 		@FXML
 		WebEngine engine = new WebEngine();
+		
 		
 		//AÇÕES DOS BOTÕES
 		public void btnHTMLCopiar (ActionEvent event) {
@@ -149,23 +167,23 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 		}
 		
 		public void btnGoogleEntrar (ActionEvent event) {
-			engine.load("http://www.google.com.br");
+			//engine.load("http://www.google.com.br");
 			}
 		
 		public void btnSEIEntrar (ActionEvent event) {
-			engine.load("https://sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI");
+			//engine.load("https://sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI");
 		}
 		
 		public void btnNavegadorIr (ActionEvent event) {
-			String pesquisa = tfLink.getText().toString();
-			engine.load(google + pesquisa);
+			//String pesquisa = tfLink.getText().toString();
+			//engine.load(google + pesquisa);
 			
 			
 		}
 		
 		// RELATORIOS E TNS
 		public void btnRelatorioCriar (ActionEvent event) {
-			engine.loadContent(INITIAL_TEXT);
+			//engine.loadContent(INITIAL_TEXT);
 			
 		}
 		
@@ -198,10 +216,6 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 	
 
 	public void btnNovoHabilitar (ActionEvent event) {
-		
-		// Field 'Documento' doesn't have a default value Deu erro ao não preencher um dos campos
-		// e mesmo depois acrescentando o valor não digitado, não deu pra cadastrar
-		// mas a pesquisa continuou pesquisando bem...
 		
 		tfDocumento.setDisable(false);
 		tfDocumento.setDisable(false);
@@ -289,8 +303,6 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 		
 		tvLista.setItems(listDenunciaTabelaOB);
 	 }
-	
-	
 	
 	
 			// ABA ENDEREÇO //
@@ -392,8 +404,22 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 		mapView.addMapInializedListener(this);
 		
 		//ATOS SRH - WEBVIEW
-		engine = navegador.getEngine();
-		engine.load("https://sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI");
+		
+		NavegadorWeb ();
+		
+		// TABLE VIEW SELECIONAR DOCUMENTO AO CLICAR NELE
+		tvLista.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
+		public void changed(ObservableValue<?> observable , Object oldValue, Object newValue) {
+				DenunciaTabela d = (DenunciaTabela) newValue;
+				// TESTE DA SELEÇÃO DE DOCUMENTO NO TABLE VIEW//
+				System.out.println("Documento: " + d.getDocumento_Denuncia() + " Doc SEI: " + d.getDocumento_SEI_Denuncia() 
+				+ " Proc SEI: " + d.getProcesso_SEI_Denuncia());
+				
+				btnEditar.setDisable(false);
+				btnExcluir.setDisable(false);
+			}
+		});
+		
 	}
 	
 	private void modularBotoesInicial () {
@@ -437,5 +463,24 @@ public class TelaInicialController implements Initializable, MapComponentInitial
     
     map.addMarker( markerMap );  
 	}
+	
+	public void NavegadorWeb () {
+
+		navegador.getEngine().setCreatePopupHandler(new Callback<PopupFeatures, WebEngine>() {
+
+			public WebEngine call(PopupFeatures p) {
+				Stage stage = new Stage(StageStyle.UTILITY);
+		        WebView wv2 = new WebView();
+		        stage.setScene(new Scene(wv2, 900, 600));
+		        stage.show();
+		        return wv2.getEngine();
+		        }
+		    });
+		//ler conteúdo
+		navegador.getEngine().loadContent(INITIAL_TEXT);
+		//ler link
+		//navegador.getEngine().load("http://treinamento3.sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI");
+		
+		}
 	
 }

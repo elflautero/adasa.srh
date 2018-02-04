@@ -35,7 +35,7 @@ public class DenunciaDao {
 		list = crit.list();
 		// SQL list = s.createSQLQuery("SELECT * FROM Denuncia WHERE Documento_Denuncia LIKE '%strPesquisa%'").list();
 		//list = s.createQuery("from Denuncia d where d.Documento_Denuncia= : strPesquisa").setString("strPesquisa",strPesquisa).list();
-		//list = s.createQuery("from Denuncia").setString("Documento_Denuncia", strPesquisa).list();
+		
 		s.getTransaction().commit();
 		s.close();
 		return list;
