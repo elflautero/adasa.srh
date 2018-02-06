@@ -9,8 +9,11 @@ public class DenunciaTabela {
 	private final SimpleStringProperty Documento_Denuncia;
 	private final SimpleStringProperty Documento_SEI_Denuncia;
 	private final SimpleStringProperty Processo_SEI_Denuncia;
+	private final SimpleStringProperty Descricao_Denuncia;
 	
-	public DenunciaTabela (int Cod_Denuncia, String Documento_Denuncia, String Documento_SEI_Denuncia, String Processo_SEI_Denuncia) {
+	// CONSTRUTOR 
+	
+	public DenunciaTabela (int Cod_Denuncia, String Documento_Denuncia, String Documento_SEI_Denuncia, String Processo_SEI_Denuncia, String Descricao_Denuncia) {
 		
 		super();
 		
@@ -18,10 +21,11 @@ public class DenunciaTabela {
 		this.Documento_Denuncia = new SimpleStringProperty(Documento_Denuncia);
 		this.Documento_SEI_Denuncia = new SimpleStringProperty(Documento_SEI_Denuncia);
 		this.Processo_SEI_Denuncia = new SimpleStringProperty(Processo_SEI_Denuncia);
+		this.Descricao_Denuncia = new SimpleStringProperty(Descricao_Denuncia);
 		
 	}
 	public int getCod_Denuncia () {
-		return Cod_Denuncia.get();// esse get é para pegar apenas o que queremos do dado, 
+		return Cod_Denuncia.get();// esse get é para pegar apenas o que queremos do dado, senão ele retornaria uma string longa... 
 	}
 	public String getDocumento_Denuncia () {
 		return Documento_Denuncia.get();
@@ -32,27 +36,8 @@ public class DenunciaTabela {
 	public String getProcesso_SEI_Denuncia () {
 		return Processo_SEI_Denuncia.get();
 	}
+	public String getDescricao_Denuncia () {
+		return Descricao_Denuncia.get();
+	}
 		
 }
-
-
-/*
-  		Classe Denuncia
-
-private int Cod_Denuncia;
-
-@Column (name="Documento_Denuncia", nullable = false)
-private String Documento_Denuncia;
-
-@Column (name="Documento_SEI_Denuncia", nullable = false)
-private String Documento_SEI_Denuncia;
-
-@Column (name="Processo_SEI_Denuncia", nullable = false)
-private String Processo_SEI_Denuncia;
-
-@Column (name="Descricao_Denuncia", nullable = false)
-private String Descricao_Denuncia;
-
- Cod_Denuncia Documento_Denuncia Documento_SEI_Denuncia Processo_SEI_Denuncia
-
-*/

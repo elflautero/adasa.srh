@@ -12,7 +12,7 @@ import adasa.srh.entity.HibernateUtil;
 
 public class DenunciaDao {
 
-	public void addDenuncia (Denuncia denuncia) {
+	public void salvaDenuncia (Denuncia denuncia) {
 		
 		Session s = HibernateUtil.getSessionFactory().openSession();
 		s.beginTransaction();
@@ -23,7 +23,7 @@ public class DenunciaDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Denuncia> listDenunciaEntity(String strPesquisa) {
+	public List<Denuncia> listDenuncia(String strPesquisa) {
 		List<Denuncia> list = new ArrayList<Denuncia>();
 		
 		Session s = HibernateUtil.getSessionFactory().openSession();
@@ -41,22 +41,20 @@ public class DenunciaDao {
 		return list;
 	}
 	
-	// "from Denuncia"
-	
-	/* não consegui 
-	@SuppressWarnings("unchecked")
-	public List<Denuncia> listDenunciaEntity(String strRecebePesquisa) { //Denuncia denuncia
-	
-	Example exDenuncia = Example.create(strRecebePesquisa)
-		    .enableLike(MatchMode.ANYWHERE);
-		Example exDocumentoDenuncia = Example.create(strRecebePesquisa.get); strRecebePesquisa
+	public void removeDenuncia(Integer id) {
 		Session s = HibernateUtil.getSessionFactory().openSession();
-		List<Denuncia> list = 
-		    s.createCriteria(Denuncia.class).add(exDenuncia)
-		    .createCriteria("Documento_Denuncia").add(exDocumentoDenuncia)
-		      .list();
-		return list;
+		s.beginTransaction();
+		Denuncia c = (Denuncia) s.load(Denuncia.class, id);
+		s.delete(c);
+		s.getTransaction().commit();
+		s.close();
 	}
-	*/
-	
+
+	public void editarDenuncia(Denuncia denuncia) {
+		Session s = HibernateUtil.getSessionFactory().openSession();
+		s.beginTransaction();
+		s.update(denuncia);
+		s.getTransaction().commit();
+		s.close();
+	}
 }

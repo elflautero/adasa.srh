@@ -171,10 +171,7 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab text="Teste" />
-                  	<content>
-                  		<fx:inclued fx:id="tabTeste" source="/fxml/TabTeste.fxml"
-                  	</content>
+                  	
               </tabs>
             </TabPane>
          </children>

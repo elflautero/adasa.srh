@@ -32,7 +32,6 @@ import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -50,42 +49,22 @@ import javafx.util.Callback;
 
 public class TelaInicialController implements Initializable, MapComponentInitializedListener  {
 	
-	// MAPS //
-	Double latCoord = -15.7754084; // latitude inicial do mapa - ADASA
-	Double longCoord = -47.9411395; // longitude inicial do mapa - ADASA
+	// GERAL
 	
-	String linkSEI = "http://treinamento3.sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI";
+		//STRING DE TESTE EM HTML PARA MOSTAR NO VISOR DO HTML EDITOR
+			String INITIAL_TEXT = "<table style='border:4px solid;border-bottom-width:0px; margin-left:auto;margin-right:auto;width:800px;'>"
+					+ 				"<tbody>" 
+					+					"<tr>"
+					+						"<td align='left'><strong>RELAT&Oacute;RIO DE VISTORIA E FISCALIZA&Ccedil;&Atilde;O N&deg;</strong></td>" 
+					+						"<td align='left'><strong>SEI N&deg;</strong></td>"
+					+					"</tr>"
+					+				"</tbody>"
+					+			"</table>";
+			String google = "https://www.google.com.br/search?source=hp&ei=BqVsWruNOMuXwgSko764DA&q=";
+			
 	
-	
-	@FXML  // tentando colocar um controlador para cada aba do tabpane
-	private TesteController TesteController;
-	
-	@FXML
-	Button btnAtualizar = new Button();
-	@FXML
-	Button btnObterCoord = new Button();
-	@FXML
-	Button btnCapturar = new Button();
-	@FXML
-	TabPane tpTelaInicial = new TabPane();
-	//@FXML
-	//Tab tbTeste = new Tab(); 
-	
-	// LATITUDE E LONGITUDE
-	@FXML
-	TextField tfLat = new TextField();
-	@FXML
-	TextField tfLon = new TextField();
-	@FXML
-	TextField tfInserirLink = new TextField();
-	
-	@FXML 
-	Button btnHome = new Button();
-	@FXML
-	ImageView imgVHome = new ImageView();
-	
-			// ABA DENUNCIA - TEXTFIELDS //
-	
+	//  TAB DENUNCIA - TEXTFIELD
+
 	@FXML
 	TextField tfDocumento = new TextField();
 	@FXML
@@ -96,72 +75,145 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 	TextField tfResDen = new TextField();
 	@FXML
 	TextField tfPesquisar = new TextField();
-	
-		// ABA DENÚNCIA - BOTÕES //
-	@FXML
-	Button btnNovo = new Button();
-	@FXML
-	Button btnSalvar = new Button();
-	@FXML
-	Button btnEditar = new Button();
-	@FXML
-	Button btnExcluir = new Button();
-	@FXML
-	Button btnCancelar = new Button();
-	@FXML
-	Button btnPesquisar = new Button();
-	@FXML
-	Button btnSair = new Button();
-	
-		// colocar o botão atualizar, para a atualizar a tabela com o novo documento salvo
-	
-	// BOTÕES - ATOS SRH
-	
-		@FXML
-		Button btnRelatorio = new Button();
-		@FXML
-		Button btnTN = new Button();
-		@FXML
-		Button btnAIA = new Button();
-		@FXML
-		Button btnMulta = new Button();
-		@FXML
-		Button btnHTML = new Button();
-		@FXML
-		Button btnGoogle = new Button();
-		@FXML
-		Button btnSEI = new Button();
-		@FXML
-		Button btnNavegador = new Button();
-		
 
-		//STRING DE TESTE EM HTML PARA MOSTAR NO VISOR DO HTML EDITOR
-		String INITIAL_TEXT = "<table style='border:4px solid;border-bottom-width:0px; margin-left:auto;margin-right:auto;width:800px;'>"
-				+ 				"<tbody>" 
-				+					"<tr>"
-				+						"<td align='left'><strong>RELAT&Oacute;RIO DE VISTORIA E FISCALIZA&Ccedil;&Atilde;O N&deg;</strong></td>" 
-				+						"<td align='left'><strong>SEI N&deg;</strong></td>"
-				+					"</tr>"
-				+				"</tbody>"
-				+			"</table>";
-		String google = "https://www.google.com.br/search?source=hp&ei=BqVsWruNOMuXwgSko764DA&q=";
+			// TAB DENÚNCIA - BOTÕES //
+		@FXML
+		Button btnNovo = new Button();
+		@FXML
+		Button btnSalvar = new Button();
+		@FXML
+		Button btnEditar = new Button();
+		@FXML
+		Button btnExcluir = new Button();
+		@FXML
+		Button btnCancelar = new Button();
+		@FXML
+		Button btnPesquisar = new Button();
+		@FXML
+		Button btnSair = new Button();
+
+			// colocar o botão atualizar, para a atualizar a tabela com o novo documento salvo
 		
-		// TEXT FIELD
+					// TABLEVIEW - TAB DENÚNCIA
+						// string para pesquisar no banco
+					
+					
+					@FXML
+					private TableView <DenunciaTabela> tvLista;
+					// COLUMNS
+					@FXML
+					private TableColumn<DenunciaTabela, String> tcDocumento;
+					@FXML
+					private TableColumn<DenunciaTabela, String> tcDocSEI;
+					@FXML
+					private TableColumn<DenunciaTabela, String> tcProcSEI;
+					
+					//método de retorno observable list
+					/*
+					private ObservableList<Denuncia> obsListPesquisa () {
+						ObservableList<Denuncia> denunciaObsListPesquisa = FXCollections.observableArrayList();
+						return obsListPesquisa();
+					}
+					*/
+					
+					String strPesquisa = "";
+					
+					private DenunciaDao denunciaDao = new DenunciaDao();	
+					private List<Denuncia> denunciaList = denunciaDao.listDenuncia(strPesquisa);
+					private ObservableList<DenunciaTabela> obsListDenunciaTabela= FXCollections.observableArrayList();
+					
+					public void listarDenuncias () {
+						if (!obsListDenunciaTabela.isEmpty()) {
+							obsListDenunciaTabela.clear();
+						}
+						for (Denuncia denuncia : denunciaList) {
+							DenunciaTabela denTab = new DenunciaTabela(
+									denuncia.getCod_Denuncia(), 
+									denuncia.getDocumento_Denuncia(),
+									denuncia.getDocumento_SEI_Denuncia(), 
+									denuncia.getProcesso_SEI_Denuncia(),
+									denuncia.getDescricao_Denuncia()
+									);
+							
+								obsListDenunciaTabela.add(denTab);
+						}
+						
+						tcDocumento.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("Documento_Denuncia")); 
+
+                        tcDocSEI.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("Documento_SEI_Denuncia")); 
+
+                        tcProcSEI.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("Processo_SEI_Denuncia")); 
+                        
+                        tvLista.setItems(obsListDenunciaTabela); 
+					}
+					
+	
+	// TAB ENDEREÇO - GOOGLE MAPS ////WEB BROWSER
+					
+		// colocar alerta de webview sem conexao
+					
+					
+	Double latCoord = -15.7754084; // latitude inicial do mapa - ADASA
+	Double longCoord = -47.9411395; // longitude inicial do mapa - ADASA
+	
+	String linkSEI = "http://treinamento3.sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI";
+	
+	@FXML
+	Button btnAtualizar = new Button();
+	@FXML
+	Button btnObterCoord = new Button();
+	@FXML
+	Button btnCapturar = new Button();
+	@FXML
+	TabPane tpTelaInicial = new TabPane();
+
+		// TAB ENDEREÇO - LATITUDE E LONGITUDE
+		@FXML
+		TextField tfLat = new TextField();
+		@FXML
+		TextField tfLon = new TextField();
+		@FXML
+		TextField tfInserirLink = new TextField();
+		
+			// TAB ENDEREÇO - BOTÕES
+			@FXML 
+			Button btnHome = new Button();
+			@FXML
+			ImageView imgVHome = new ImageView();
+	
+	
+	
+	// TAB ATOS SRH - BOTÕES
+	
+	@FXML
+	Button btnRelatorio = new Button();
+	@FXML
+	Button btnTN = new Button();
+	@FXML
+	Button btnAIA = new Button();
+	@FXML
+	Button btnMulta = new Button();
+	@FXML
+	Button btnHTML = new Button();
+	@FXML
+	Button btnGoogle = new Button();
+	@FXML
+	Button btnSEI = new Button();
+	@FXML
+	Button btnNavegador = new Button();
+	
+		// TAB ATOS SRH - TEXT FIELD
 		@FXML
 		TextField tfLink = new TextField();
 		
-		//WEB BROWSER
-		
-			// colocar alerta de webview sem conexao
-		
-		
-		@FXML
-		WebView navegador = new WebView();
-		@FXML
-		WebEngine engine = new WebEngine();
+			//TAB ATOS SRH - WEB VIEW
+			@FXML
+			WebView navegador = new WebView();
+			@FXML
+			WebEngine engine = new WebEngine();
 		
 		
-		//AÇÕES DOS BOTÕES
+		//TAB ATOS SRH - AÇÕES DOS BOTÕES
 		public void btnHTMLCopiar (ActionEvent event) {
 				
 		}
@@ -200,33 +252,24 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 		}
 
 	
-	// TABLE VIEW
-		@FXML
-		private TableView <DenunciaTabela> tvLista;
-		
-		// COLUMNS
-		@FXML
-		private TableColumn<DenunciaTabela, String> tcDocumento;
-		@FXML
-		private TableColumn<DenunciaTabela, String> tcDocSEI;
-		@FXML
-		private TableColumn<DenunciaTabela, String> tcProcSEI;
-		
-		// EVENTOS ABA DENÚNCIA //
+	// EVENTOS TAB DENÚNCIA //
 	
-
 	public void btnNovoHabilitar (ActionEvent event) {
 		
-		tfDocumento.setDisable(false);
+		tfDocumento.setText("");
+		tfDocSei.setText("");
+		tfProcSei.setText("");
+		tfResDen.setText("");
+		
 		tfDocumento.setDisable(false);
 		tfDocSei.setDisable(false);
 		tfProcSei.setDisable(false);
 		tfResDen.setDisable(false);
+		
 		btnSalvar.setDisable(false);
 		btnEditar.setDisable(true);
 		btnExcluir.setDisable(true);
 		btnNovo.setDisable(true);
-		
 	}
 	
 	public void btnSalvarSalvar (ActionEvent event) {
@@ -239,94 +282,99 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 		denuncia.setDescricao_Denuncia(tfResDen.getText());
 		
 		DenunciaDao dao = new DenunciaDao();
-		dao.addDenuncia(denuncia);
+		dao.salvaDenuncia(denuncia);
 		
-	}
+		tfDocumento.setText("");
+		tfDocSei.setText("");
+		tfProcSei.setText("");
+		tfResDen.setText("");
+		
+		modularBotoesInicial (); 
+			
+		}
 
 	public void btnEditarHabilitar (ActionEvent event) {
-		
-		tfDocumento.setDisable(false);
-		tfDocumento.setDisable(false);
-		tfDocSei.setDisable(false);
-		tfProcSei.setDisable(false);
-		tfResDen.setDisable(false);
-		btnSalvar.setDisable(true);
-		btnNovo.setDisable(true);
-		
+			
+		if (tfDocumento.isDisable()) {
+			tfDocumento.setDisable(false);
+			tfDocumento.setDisable(false);
+			tfDocSei.setDisable(false);
+			tfProcSei.setDisable(false);
+			tfResDen.setDisable(false);
+			
+		} else {
+			
+			DenunciaTabela denunciaTabelaEditar = tvLista.getSelectionModel().getSelectedItem();
+			Denuncia denunciaEditar = new Denuncia(denunciaTabelaEditar);
+			
+			denunciaEditar.setDocumento_Denuncia(tfDocumento.getText());
+			denunciaEditar.setDocumento_SEI_Denuncia(tfDocSei.getText());
+			denunciaEditar.setProcesso_SEI_Denuncia(tfProcSei.getText());
+			denunciaEditar.setDescricao_Denuncia(tfResDen.getText());
+			
+			denunciaDao.editarDenuncia(denunciaEditar);
+			denunciaList = denunciaDao.listDenuncia(strPesquisa);
+			listarDenuncias();
+			
+			modularBotoesInicial (); 
+				
+			}
 	}
+			
 	public void btnExcluirHabilitar (ActionEvent event) {
+	
+		DenunciaTabela denunciaExcluir = tvLista.getSelectionModel().getSelectedItem();
+		int id = denunciaExcluir.getCod_Denuncia();
+		System.out.println("O id é: " + id);
+		obsListDenunciaTabela.remove(denunciaExcluir);
+		denunciaDao.removeDenuncia(id);
+		denunciaList = denunciaDao.listDenuncia(strPesquisa);
+		listarDenuncias();
 		
+		modularBotoesInicial (); 		
 	}
+		
+			
 	public void btnCancelarHabilitar (ActionEvent event) {
-		
-		/* ver um jeito de limpar os campos mas dar um reset no programa também
-		 * 
-		 */
-		
+			
 		modularBotoesInicial();
 	}
+		
 	public void btnPesquisarHabilitar (ActionEvent event) {
 		
-		// colocar tecla enter também além do botão pesquisar
+		strPesquisa = (String) tfPesquisar.getText();
 		
-		String strPesquisa = (String) tfPesquisar.getText();
+		DenunciaDao denunciaDao = new DenunciaDao();	
+		denunciaList = denunciaDao.listDenuncia(strPesquisa);
+		listarDenuncias (); 
 		
-		listarDenuncia(strPesquisa);
+		modularBotoesInicial (); 
+		
 	}
 	
-	public void listarDenuncia (String strPesquisa) {
-		
-		/* ver como faz para quando clicar num documento ele preencher tudo acima e abaixo em outra lista
-		 * buscar outros documentos  relacionados como tn, rv etc
-		 */
-		
-		//CONEXÃO  DAO
-		DenunciaDao denunciaDaoController = new DenunciaDao ();
-		// LIST (para guardar a DenunciaDao
-		List<Denuncia> denunciaListController = denunciaDaoController.listDenunciaEntity(strPesquisa);
-		// PARA JOGAR O DADO NO TABLEVIEW JAVAFX
-		
-		ObservableList<DenunciaTabela> listDenunciaTabelaOB = FXCollections.observableArrayList();
-		// MÉTODO PARA CHAMAR OS DADOS
-		
-		if (!listDenunciaTabelaOB.isEmpty()) {
-			listDenunciaTabelaOB.clear();
-		}
-		for (Denuncia denuncia : denunciaListController) {
-			DenunciaTabela d = new DenunciaTabela(denuncia.getCod_Denuncia(), denuncia.getDocumento_Denuncia(), denuncia.getDocumento_SEI_Denuncia(), denuncia.getProcesso_SEI_Denuncia());
-			listDenunciaTabelaOB.add(d);
-		}
-		
-		tcDocumento.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("Documento_Denuncia"));
-		tcDocSEI.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("Documento_SEI_Denuncia"));
-		tcProcSEI.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("Processo_SEI_Denuncia"));
-		
-		tvLista.setItems(listDenunciaTabelaOB);
-	 }
-	
-	
-			// ABA ENDEREÇO //
-	
-	// GOOGLE MAPS - GMAPSFX
+	// TAB ENDEREÇO - GOOGLE MAPS - GMAPSFX
 	@FXML
 	private GoogleMapView mapView; 
 	
 	private GoogleMap map;
 	
-	//BOX DE ESCOLHA PESSOA FÍSICA E JURÍDICA
+			// BOTÃO - OBTER COORDENADAS E ATUALIZAR GMAPSFX
+			public void btnAtualizarLatLong (ActionEvent event) {
+				latCoord = Double.parseDouble(tfLat.getText());
+				longCoord = Double.parseDouble(tfLon.getText());
+				
+				mapInitialized();
+				
+			}
+	
+	//TAB USUÁRIO - BOX DE ESCOLHA PESSOA FÍSICA E JURÍDICA
 	@FXML
 	ChoiceBox<String> cbTipoPessoa = new ChoiceBox<String>();
 		ObservableList<String> olTipoPessoa = FXCollections
 			.observableArrayList("Física" , "Jurídica"); // box - seleção pessoa físcia ou jurídica
 	
-	// BOTÃO - OBTER COORDENADAS E INICIALIZAR GMAPSFX
-	public void btnAtualizarLatLong (ActionEvent event) {
-		latCoord = Double.parseDouble(tfLat.getText());
-		longCoord = Double.parseDouble(tfLon.getText());
-		
-		mapInitialized();
-		
-	}
+	
+	
 	
 	// BOTÃO - CAPTURAR TELA DO MAPA PARA O CROQUI
 	public void btnCapturarCorqui (ActionEvent event) {  // consertar o nome do método, a palavra é croqui
@@ -342,60 +390,29 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 		e.printStackTrace();
 	}
 	}
+	
 	public void btnObterCoordEvento (ActionEvent event) {
 			
 		String linkCoord = (tfInserirLink.getText());
-
-		// parâmetro de busca: @ e , 
-
-        int pInicial = linkCoord.indexOf("@"); //posição inicial do @ referente ao link completo 
-
-        int pFinal = linkCoord.lastIndexOf(","); // posição da última ,(vírgula) referente ao link completo 
-
-        String coord = linkCoord.substring(pInicial, pFinal); 
-
-         
-
-        System.out.println("Posições do @ e , : " + pInicial + " e " + pFinal); 
-
-        System.out.println("String coord: " + coord); 
-
-         
-
-        // repetir a busca de posicionamento  do @ e , a partir agora da String coord 
-
-        pInicial = coord.indexOf("@"); 
-
-        pFinal = coord.indexOf(","); 
-
-         
-
-        System.out.println(pInicial + " e " + pFinal); 
-
-         
-
-        int pFinalSum = pFinal + 1; 
-
-        int pFinalSub = pFinal - 1; 
-
-        String lat = coord.substring(1,(pFinal)); 
-
-        String lon = coord.substring (pFinalSum, (pFinal + pFinalSub)); 
-
-        System.out.println(lat); 
-
-        System.out.println(lon); 
 		
-		tfLat.setText(lat);
-		tfLon.setText(lon);
+		int latIni= linkCoord.indexOf("@");
+		String lat = linkCoord.substring(latIni);
+		
+		int latF = lat.indexOf(",");
+		String latitude = lat.substring(1, latF);
+		
+		String longitude = lat.substring(latF + 1, latF + 1 + latitude.length());
+		
+		tfLat.setText(latitude);
+		tfLon.setText(longitude);
 		
 	}
 	
+	// INITIALIZE  - INICIAÇÃO GERAL DA PÁGINA INICIAL
 	public void initialize(URL url, ResourceBundle rb) {
 		
 		// DENUNCIA - BOTÕES
 		modularBotoesInicial();
-		
 		
 		cbTipoPessoa.setValue("Física");
 		cbTipoPessoa.setItems(olTipoPessoa);
@@ -404,24 +421,17 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 		mapView.addMapInializedListener(this);
 		
 		//ATOS SRH - WEBVIEW
-		
 		NavegadorWeb ();
 		
-		// TABLE VIEW SELECIONAR DOCUMENTO AO CLICAR NELE
-		tvLista.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
-		public void changed(ObservableValue<?> observable , Object oldValue, Object newValue) {
-				DenunciaTabela d = (DenunciaTabela) newValue;
-				// TESTE DA SELEÇÃO DE DOCUMENTO NO TABLE VIEW//
-				System.out.println("Documento: " + d.getDocumento_Denuncia() + " Doc SEI: " + d.getDocumento_SEI_Denuncia() 
-				+ " Proc SEI: " + d.getProcesso_SEI_Denuncia());
-				
-				btnEditar.setDisable(false);
-				btnExcluir.setDisable(false);
-			}
-		});
+		// Selecionar um documento pesquisado
+		SelecionarDenuncia ();
+		
+		// listar denuncias
+		listarDenuncias();
 		
 	}
 	
+	//MÉTODO INICIAL DE HABILITAR E DESABILITAR BOTÕES
 	private void modularBotoesInicial () {
 		
 		tfDocumento.setDisable(true);
@@ -435,7 +445,9 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 		btnNovo.setDisable(false);
 		
 	}
-		
+	
+	
+	// INICIALIZE DO GOOGLE MAPS
 	public void mapInitialized() {
 		
 		// Propriedades e opcoes do mapa //
@@ -454,16 +466,17 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 		
 		map = mapView.createMap(mapaOpcoes);
 
-	//adicionar marcador
-    MarkerOptions marcador = new MarkerOptions();
-    
-    marcador.position(new LatLong(latCoord,longCoord));
-    
-    Marker markerMap = new Marker(marcador);
-    
-    map.addMarker( markerMap );  
-	}
+			// ADICIONAR MARCADOR AO MAPA
+		    MarkerOptions marcador = new MarkerOptions();
+		    
+		    marcador.position(new LatLong(latCoord,longCoord));
+		    
+		    Marker markerMap = new Marker(marcador);
+		    
+		    map.addMarker( markerMap );  
+			}
 	
+	// METODO DE INICIALIZAR O WEBVIEW
 	public void NavegadorWeb () {
 
 		navegador.getEngine().setCreatePopupHandler(new Callback<PopupFeatures, WebEngine>() {
@@ -477,10 +490,47 @@ public class TelaInicialController implements Initializable, MapComponentInitial
 		        }
 		    });
 		//ler conteúdo
-		navegador.getEngine().loadContent(INITIAL_TEXT);
+		//navegador.getEngine().loadContent(INITIAL_TEXT);
 		//ler link
-		//navegador.getEngine().load("http://treinamento3.sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI");
+		navegador.getEngine().load("http://treinamento3.sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI");
 		
 		}
+	
+	public void SelecionarDenuncia () {
+		// TABLE VIEW SELECIONAR DOCUMENTO AO CLICAR NELE
+		
+				tvLista.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
+					public void changed(ObservableValue<?> observable , Object oldValue, Object newValue) {
+							DenunciaTabela denTab = (DenunciaTabela) newValue;
+							if (denTab == null) {
+								
+								tfDocumento.setText("");
+								tfDocSei.setText("");
+								tfProcSei.setText("");
+								tfResDen.setText("");
+								
+								btnNovo.setDisable(true);
+								btnSalvar.setDisable(true);
+								btnEditar.setDisable(false);
+								btnExcluir.setDisable(false);
+								btnCancelar.setDisable(false);
+								
+							} else {
+		
+								tfDocumento.setText(denTab.getDocumento_Denuncia());
+								tfDocSei.setText(denTab.getDocumento_SEI_Denuncia());
+								tfProcSei.setText(denTab.getProcesso_SEI_Denuncia());
+								tfResDen.setText(denTab.getDescricao_Denuncia());
+								
+								btnNovo.setDisable(true);
+								btnSalvar.setDisable(true);
+								btnEditar.setDisable(false);
+								btnExcluir.setDisable(false);
+								btnCancelar.setDisable(false);
+							}
+						}
+					});
+				
+	}
 	
 }

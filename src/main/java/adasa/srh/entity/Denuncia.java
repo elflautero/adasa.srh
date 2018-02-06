@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import adasa.srh.tabela.DenunciaTabela;
+
 @Entity
 public class Denuncia implements Serializable {
 
@@ -26,7 +28,23 @@ public class Denuncia implements Serializable {
 	
 	@Column (name="Descricao_Denuncia", nullable = false)
 	private String Descricao_Denuncia;
-
+	
+	
+	//CONSTRUTOR PADRÃO
+	public Denuncia () {
+		
+	}
+	
+	//CONSTRUTOR DE EDITAR DOCUMENTO
+	public Denuncia(DenunciaTabela denunciaTabela) {
+		this.Cod_Denuncia = denunciaTabela.getCod_Denuncia();
+		this.Documento_Denuncia = denunciaTabela.getDocumento_Denuncia();
+		this.Documento_SEI_Denuncia = denunciaTabela.getDocumento_SEI_Denuncia();
+		this.Processo_SEI_Denuncia = denunciaTabela.getProcesso_SEI_Denuncia();
+	}
+	
+	
+	// GETTERS AND SETTERS
 	public int getCod_Denuncia() {
 		return Cod_Denuncia;
 	}
